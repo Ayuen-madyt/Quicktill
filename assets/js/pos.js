@@ -1912,51 +1912,51 @@ function loadTransactions() {
 
       allTransactions = [...transactions];
 
-      transactions.forEach((trans, index) => {
+      transactions?.forEach((trans, index) => {
         sales += parseFloat(trans.total);
         transact++;
 
-        trans.items.forEach((item) => {
+        trans?.items?.forEach((item) => {
           sold_items.push(item);
         });
 
-        if (!tills.includes(trans.till)) {
-          tills.push(trans.till);
+        if (!tills?.includes(trans?.till)) {
+          tills.push(trans?.till);
         }
 
-        if (!users.includes(trans.user_id)) {
-          users.push(trans.user_id);
+        if (!users.includes(trans?.user_id)) {
+          users.push(trans?.user_id);
         }
 
         counter++;
         transaction_list += `<tr>
-                                <td>${trans.order}</td>
-                                <td class="nobr">${moment(trans.date).format(
+                                <td>${trans?.order}</td>
+                                <td class="nobr">${moment(trans?.date).format(
                                   "YYYY MMM DD hh:mm:ss"
                                 )}</td>
-                                <td>${settings.symbol + trans.total}</td>
+                                <td>${settings.symbol + trans?.total}</td>
                                 <td>${
                                   trans.paid == ""
                                     ? ""
-                                    : settings.symbol + trans.paid
+                                    : settings.symbol + trans?.paid
                                 }</td>
                                 <td>${
                                   trans.change
                                     ? settings.symbol +
-                                      Math.abs(trans.change).toFixed(2)
+                                      Math.abs(trans?.change).toFixed(2)
                                     : ""
                                 }</td>
                                 <td>${
-                                  trans.paid == ""
+                                  trans?.paid == ""
                                     ? ""
-                                    : trans.payment_type == 0
+                                    : trans?.payment_type == 0
                                     ? "Cash"
                                     : "Card"
                                 }</td>
-                                <td>${trans.till}</td>
-                                <td>${trans.user}</td>
+                                <td>${trans?.till}</td>
+                                <td>${trans?.user}</td>
                                 <td>${
-                                  trans.paid == ""
+                                  trans?.paid == ""
                                     ? '<button class="btn btn-dark"><i class="fa fa-search-plus"></i></button>'
                                     : '<button onClick="$(this).viewTransaction(' +
                                       index +
@@ -2049,24 +2049,24 @@ function loadSoldProducts() {
     items += item.qty;
     products++;
 
-    let product = allProducts.filter(function (selected) {
+    let product = allProducts?.filter(function (selected) {
       return selected._id == item.id;
     });
 
     counter++;
 
     sold_list += `<tr>
-            <td>${item.product}</td>
-            <td>${item.qty}</td>
+            <td>${item?.product}</td>
+            <td>${item?.qty}</td>
             <td>${
               product[0]?.stock == 1
                 ? product.length > 0
-                  ? product[0].quantity
+                  ? product[0]?.quantity
                   : ""
                 : "N/A"
             }</td>
             <td>${
-              settings.symbol + (item.qty * parseFloat(item.price)).toFixed(2)
+              settings.symbol + (item?.qty * parseFloat(item.price))?.toFixed(2)
             }</td>
             </tr>`;
 
@@ -2083,11 +2083,11 @@ function userFilter(users) {
   $("#users").append(`<option value="0">All</option>`);
 
   users.forEach((user) => {
-    let u = allUsers.filter(function (usr) {
+    let u = allUsers?.filter(function (usr) {
       return usr._id == user;
     });
 
-    $("#users").append(`<option value="${user}">${u[0].fullname}</option>`);
+    $("#users").append(`<option value="${user}">${u[0]?.fullname}</option>`);
   });
 }
 
@@ -2104,18 +2104,18 @@ $.fn.viewTransaction = function (index) {
 
   let discount = allTransactions[index].discount;
   let customer =
-    allTransactions[index].customer == 0
+    allTransactions[index]?.customer == 0
       ? "Walk in Customer"
       : allTransactions[index].customer.username;
   let refNumber =
-    allTransactions[index].ref_number != ""
+    allTransactions[index]?.ref_number != ""
       ? allTransactions[index].ref_number
-      : allTransactions[index].order;
-  let orderNumber = allTransactions[index].order;
+      : allTransactions[index]?.order;
+  let orderNumber = allTransactions[index]?.order;
   let type = "";
   let tax_row = "";
   let items = "";
-  let products = allTransactions[index].items;
+  let products = allTransactions[index]?.items;
 
   products.forEach((item) => {
     items +=
@@ -2129,7 +2129,7 @@ $.fn.viewTransaction = function (index) {
       "</td></tr>";
   });
 
-  switch (allTransactions[index].payment_type) {
+  switch (allTransactions[index]?.payment_type) {
     case 2:
       type = "Card";
       break;
@@ -2138,18 +2138,18 @@ $.fn.viewTransaction = function (index) {
       type = "Cash";
   }
 
-  if (allTransactions[index].paid != "") {
+  if (allTransactions[index]?.paid != "") {
     payment = `<tr>
                     <td>Paid</td>
                     <td>:</td>
-                    <td>${settings.symbol + allTransactions[index].paid}</td>
+                    <td>${settings.symbol + allTransactions[index]?.paid}</td>
                 </tr>
                 <tr>
                     <td>Change</td>
                     <td>:</td>
                     <td>${
                       settings.symbol +
-                      Math.abs(allTransactions[index].change).toFixed(2)
+                      Math.abs(allTransactions[index]?.change).toFixed(2)
                     }</td>
                 </tr>
                 <tr>
@@ -2193,12 +2193,12 @@ $.fn.viewTransaction = function (index) {
         Invoice : ${orderNumber} <br>
         Ref No : ${refNumber} <br>
         Customer : ${
-          allTransactions[index].customer == 0
+          allTransactions[index]?.customer == 0
             ? "Walk in Customer"
-            : allTransactions[index].customer.name
+            : allTransactions[index]?.customer?.name
         } <br>
-        Cashier : ${allTransactions[index].user} <br>
-        Date : ${moment(allTransactions[index].date).format(
+        Cashier : ${allTransactions[index]?.user} <br>
+        Date : ${moment(allTransactions[index]?.date).format(
           "DD MMM YYYY HH:mm:ss"
         )}<br>
         </p>
@@ -2219,7 +2219,7 @@ $.fn.viewTransaction = function (index) {
         <tr>                        
             <td><b>Subtotal</b></td>
             <td>:</td>
-            <td><b>${settings.symbol}${allTransactions[index].subtotal}</b></td>
+            <td><b>${settings.symbol}${allTransactions[index]?.subtotal}</b></td>
         </tr>
         <tr>
             <td>Discount</td>
@@ -2227,7 +2227,7 @@ $.fn.viewTransaction = function (index) {
             <td>${
               discount > 0
                 ? settings.symbol +
-                  parseFloat(allTransactions[index].discount).toFixed(2)
+                  parseFloat(allTransactions[index]?.discount).toFixed(2)
                 : ""
             }</td>
         </tr>
@@ -2238,7 +2238,7 @@ $.fn.viewTransaction = function (index) {
             <td><h3>Total</h3></td>
             <td><h3>:</h3></td>
             <td>
-                <h3>${settings.symbol}${allTransactions[index].total}</h3>
+                <h3>${settings.symbol}${allTransactions[index]?.total}</h3>
             </td>
         </tr>
         ${payment == 0 ? "" : payment}
