@@ -2059,7 +2059,7 @@ function loadSoldProducts() {
             <td>${item.product}</td>
             <td>${item.qty}</td>
             <td>${
-              product[0].stock == 1
+              product[0]?.stock == 1
                 ? product.length > 0
                   ? product[0].quantity
                   : ""
