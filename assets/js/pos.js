@@ -1117,6 +1117,7 @@ if (auth == undefined) {
 
     $.fn.getCustomerOrders = function () {
       $.get(api + "customer-orders", function (data) {
+        // console.log("customer orders here: ", data)
         clearInterval(dotInterval);
         customerOrderList = data;
         customerOrderLocation.empty();
@@ -1913,7 +1914,10 @@ function loadTransactions() {
       allTransactions = [...transactions];
 
       transactions?.forEach((trans, index) => {
-        sales += parseFloat(trans.total);
+        const total = parseFloat(trans?.total);
+        if (!isNaN(total)) {
+          sales += total;
+        }
         transact++;
 
         trans?.items?.forEach((item) => {
@@ -1936,12 +1940,12 @@ function loadTransactions() {
                                 )}</td>
                                 <td>${settings.symbol + trans?.total}</td>
                                 <td>${
-                                  trans.paid == ""
+                                  trans?.paid == ""
                                     ? ""
                                     : settings.symbol + trans?.paid
                                 }</td>
                                 <td>${
-                                  trans.change
+                                  trans?.change
                                     ? settings.symbol +
                                       Math.abs(trans?.change).toFixed(2)
                                     : ""
@@ -1950,8 +1954,8 @@ function loadTransactions() {
                                   trans?.paid == ""
                                     ? ""
                                     : trans?.payment_type == 0
-                                    ? "Cash"
-                                    : "Card"
+                                    ? "Card"
+                                    : "Cash"
                                 }</td>
                                 <td>${trans?.till}</td>
                                 <td>${trans?.user}</td>
@@ -1963,8 +1967,8 @@ function loadTransactions() {
                                       ')" class="btn btn-info"><i class="fa fa-search-plus"></i></button></td>'
                                 }</tr>
                     `;
-
-        if (counter == transactions.length) {
+        
+        if (counter == transactions?.length) {
           $("#total_sales #counter").text(
             settings.symbol + parseFloat(sales).toFixed(2)
           );
