@@ -13,7 +13,7 @@ let holdOrder = 0;
 let vat = 0;
 let perms = null;
 let deleteId = 0;
-let paymentType = 0;
+let paymentType = 1;
 let receipt = "";
 let totalVat = 0;
 let subTotal = 0;
@@ -688,6 +688,21 @@ if (auth == undefined) {
       alert("print job complete");
     }
 
+    $(document).ready(function() {
+      $('.list-group-item').click(function() {
+        var buttonValue = $(this).text().trim();
+        if(buttonValue=="Cash"){
+          paymentType = 1
+        }
+       if(buttonValue=="Card"){
+        paymentType= 2
+       }
+       if(buttonValue=="Mpesa"){
+        paymentType = 3
+      }
+      });
+    });
+
     $.fn.submitDueOrder = function (status) {
       let items = "";
       let payment = 0;
@@ -724,11 +739,14 @@ if (auth == undefined) {
 
       switch (paymentType) {
         case 1:
-          type = "Cheque";
+          type = "Cash";
           break;
 
         case 2:
           type = "Card";
+          break;
+        case 3:
+          type = "Mpesa";
           break;
 
         default:
@@ -1950,13 +1968,7 @@ function loadTransactions() {
                                       Math.abs(trans?.change).toFixed(2)
                                     : ""
                                 }</td>
-                                <td>${
-                                  trans?.paid == ""
-                                    ? ""
-                                    : trans?.payment_type == 0
-                                    ? "Card"
-                                    : "Cash"
-                                }</td>
+                                <td>${trans?.payment_type}</td>
                                 <td>${trans?.till}</td>
                                 <td>${trans?.user}</td>
                                 <td>${
@@ -2134,13 +2146,20 @@ $.fn.viewTransaction = function (index) {
   });
 
   switch (allTransactions[index]?.payment_type) {
+    case 1:
+      type = "Cash";
+      break;
     case 2:
       type = "Card";
       break;
-
+    case 3:
+      type = "Mpesa";
+      break;
     default:
       type = "Cash";
   }
+
+  // console.log("Method Type: ", type)
 
   if (allTransactions[index]?.paid != "") {
     payment = `<tr>
@@ -2159,8 +2178,14 @@ $.fn.viewTransaction = function (index) {
                 <tr>
                     <td>Method</td>
                     <td>:</td>
-                    <td>${type}</td>
-                </tr>`;
+                    <td>${allTransactions[index]?.payment_type}</td>
+                </tr>
+                ${allTransactions[index]?.payment_info && 
+                `<tr>
+                    <td>Transaction Code</td>
+                    <td>:</td>
+                    <td>${allTransactions[index]?.payment_info}</td>
+                </tr>`}`;
   }
 
   if (settings.charge_tax) {

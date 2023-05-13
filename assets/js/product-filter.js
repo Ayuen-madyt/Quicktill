@@ -84,7 +84,12 @@ $(document).ready(function(){
        }else if(this.id == 'card'){
            $("#cardInfo").show();
            $("#cardInfo .input-group-addon").text("Card Info");
-       }else if(this.id == 'cash'){
+       }
+       else if(this.id == 'mpesa'){
+        $("#cardInfo").show();
+        $("#cardInfo .input-group-addon").text("Mpesa Code");
+        }
+       else if(this.id == 'cash'){
            $("#cardInfo").hide();
        }
     });
