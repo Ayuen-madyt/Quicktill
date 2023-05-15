@@ -48,7 +48,7 @@
                             </button>
             
                             <button id="viewCustomerOrders" data-toggle="modal" data-target="#customerModal" type="button" onclick="$(this).getCustomerOrders()" class="btn btn-info waves-effect waves-light">
-                                    <span class="btn-label"><i class="fa fa-user"></i> </span> Customer Orders
+                                    <span class="btn-label"><i class="fa fa-user"></i> </span> Customers
                             </button>
                         
                     </div>
@@ -117,11 +117,11 @@
                     </div>
                 
                     <div id="total_items" class="btn-info items-banner">
-                        <h5>ITEMS</h5>
+                        <h5>ITEMS SOLD</h5>
                         <div id="counter">0</div>
                     </div>
 
-                    <div id="total_products" class="btn-default">
+                    <div id="total_products" class="btn-default products-banner">
                         <h5>PRODUCTS</h5>
                         <div id="counter">0</div>
                     </div>                           
@@ -161,7 +161,7 @@
 
                             <div class="col-md-5">
                                 <div class="row">
-                                    <div class="col-md-8" id="productSales">
+                                    <div class="col-md-9" id="productSales">
                                             <h4>Products</h4>
                                             <hr>
                                             <table class="table tablesaw-enhanced" id="productsSold">
@@ -206,7 +206,7 @@
                            </div>
 
                            <div class="col-md-7 leftMargin">
-                            <table class="table tablesaw-enhanced" id="transactionList">
+                            <table class="table tablesaw-enhanced hover" id="transactionList">
                                 <thead>
                                     <tr>                                                                      
                                         <th>Invoice</th>                                      
@@ -242,7 +242,7 @@
                           </select>
                           </div>
                           <div class="col-md-2">
-                              <button data-toggle="modal" data-target="#newCustomer" class="btn btn-success"><i class="fa fa-plus"></i></button>
+                              <button data-toggle="modal" data-target="#newCustomer" id="add_customer_button" class="btn btn-success"><i class="fa fa-plus"></i></button>
                           </div>
                       </div>
                       <div class="input-group m-t-5">
@@ -533,6 +533,7 @@
               </div>
               <div class="modal-body">
                   <form id="saveCustomer" data-parsley-validate>
+                    <input type="hidden" name="id" id="customer_id">
                       <div class="form-group">
                           <label for="userName">Customer Name*</label>
                           <input type="text" required="required"  name="name" parsley-trigger="change" placeholder="Enter name" class="form-control" id="userName">
@@ -556,6 +557,45 @@
           </div>
       </div>
   </div>
+
+  <!-- edit customer -->
+  <div id="editCustomer" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="mySmallModalLabel">Edit Customer
+                    <img  class="loading m-t-5" style="margin-left: 35%" height="50px" src="assets/images/loading.gif" alt="">
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form id="editCustomer" data-parsley-validate>
+                  <input type="hidden" name="id" id="customer_id_edit">
+                    <div class="form-group">
+                        <label for="userName">Customer Name*</label>
+                        <input type="text" required="required"  name="name" parsley-trigger="change" placeholder="Enter name" class="form-control" id="userNameEdit">
+                    </div>
+                    <div class="form-group">
+                        <label for="userName">Customer Phone</label>
+                        <input type="text" name="phone" parsley-trigger="change" placeholder="Enter Phone number" class="form-control" id="phoneNumberEdit">
+                    </div>
+                    <div class="form-group">
+                        <label for="userName">Customer Email</label>
+                        <input type="email" name="email" parsley-trigger="change" placeholder="Enter email address" class="form-control" id="emailAddressEdit">
+                    </div>
+                    <div class="form-group">
+                        <label for="userName">Customer Address</label>
+                        <input type="text" name="address" parsley-trigger="change" placeholder="Enter address" class="form-control" id="userAddressEdit">
+                    </div>
+
+                    <input type="submit" class="btn btn-primary btn-block waves-effect waves-light">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+  <!-- end of edit customer -->
 
 
 
@@ -587,7 +627,7 @@
                         </div>
                         <div class="form-group">
                             <label for="userName">Barcode</label>
-                            <input type="text" required="required" name="barcode" placeholder="barcode" class="form-control" id="product_barcode">
+                            <input type="text" name="barcode" placeholder="barcode" class="form-control" id="product_barcode">
                         </div>
                         <div class="form-group">
                             <label for="userName">Stock</label>
@@ -818,15 +858,29 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title" id="myLargeModalLabel">Customer Orders</h4>
+                <h4 class="modal-title" id="myLargeModalLabel">Customers</h4>
             </div>
-            <div class="modal-body">
+            <!-- <div class="modal-body">
                 <input type="text" id="holdCustomerOrderInput" placeholder="Search order by customer name" class="holdCustomerOrderInput form-control">
                 <div class="customerOrderKeyboard"></div>
                 <br>
-                <div class="row" style="height: 460px; overflow: scroll;" id="randerCustomerOrders">
+                <div class="row" style="height: fit-content; overflow: scroll;" id="randerCustomerOrders">
                     <p>please wait <span class="dot"></span> </p>
                 </div>
+            </div> -->
+            <div class="modal-body" id="all_customers" style="padding: 20px; padding-right: 40px;"> 
+                <table class="table table-bordered" id="customerList">
+                    <thead>
+                        <tr>                                                                      
+                            <th>Name</th>                                      
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Address</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customer_list"></tbody>
+                </table>
             </div>
         </div>
     </div>

@@ -194,6 +194,25 @@ margin-right: 30px;
   overflow-y: scroll;
 }
 
+/* Style the scrollbar */
+#productSales::-webkit-scrollbar {
+  width: 8px;
+  display: none !important;
+  scrollbar-width: none !important;
+}
+
+/* Style the scrollbar thumb */
+#productSales::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+/* Make the scrollbar track transparent */
+#productSales::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+
 #total_sales { 
   width: 100%;
   color: #666;

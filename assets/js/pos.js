@@ -1,6 +1,7 @@
 let cart = [];
 let index = 0;
 let allUsers = [];
+let allCustomers = [];
 let allProducts = [];
 let allCategories = [];
 let allTransactions = [];
@@ -205,7 +206,7 @@ if (auth == undefined) {
     }
 
     // function to load products
-    function loadProducts(pageNumber = 1, pageSize = 20) {
+    function loadProducts(pageNumber = 1, pageSize = 18) {
       $.get(api + "inventory/products", function (data) {
         data.forEach((item) => {
           item.price = parseFloat(item.price).toFixed(2);
@@ -704,6 +705,9 @@ if (auth == undefined) {
     });
 
     $.fn.submitDueOrder = function (status) {
+      // setting value of card info/mpesa code to empty
+      $("#paymentInfo").val("")
+
       let items = "";
       let payment = 0;
 
@@ -1143,6 +1147,7 @@ if (auth == undefined) {
       });
     };
 
+    // adding a new customer
     $("#saveCustomer").on("submit", function (e) {
       e.preventDefault();
 
@@ -1186,6 +1191,53 @@ if (auth == undefined) {
           Swal.fire("Error", "Something went wrong please try again", "error");
         },
       });
+    });
+
+    // updating customer details
+    $("#editCustomer").on("submit", function (e) {
+      e.preventDefault();
+
+      let custData = {
+        _id: parseInt($("#customer_id_edit").val()),
+        name: $("#userNameEdit").val(),
+        phone: $("#phoneNumberEdit").val(),
+        email: $("#emailAddressEdit").val(),
+        address: $("#userAddressEdit").val(),
+      };
+
+      $.ajax({
+        url: api + "customers/customer",
+        type: "PUT",
+        data: JSON.stringify(custData),
+        contentType: "application/json; charset=utf-8",
+        cache: false,
+        processData: false,
+        success: function (data) {
+          $("#editCustomer").modal("hide");
+          Swal.fire(
+            "Customer updated!",
+            "Customer updated successfully!",
+            "success"
+          );
+          $("#customer option:selected").removeAttr("selected");
+          $("#customer").append(
+            $("<option>", {
+              text: custData.name,
+              value: `{"id": ${custData._id}, "name": ${custData.name}}`,
+              selected: "selected",
+            })
+          );
+
+          $("#customer")
+            .val(`{"id": ${custData._id}, "name": ${custData.name}}`)
+            .trigger("chosen:updated");
+        },
+        error: function (data) {
+          $("#editCustomer").modal("hide");
+          Swal.fire("Error", "Something went wrong please try again", "error");
+        },
+      });
+      editCustomer = false;
     });
 
     $("#confirmPayment").hide();
@@ -1486,6 +1538,7 @@ if (auth == undefined) {
       $("#userList").DataTable().destroy();
 
       $.get(api + "users/all", function (users) {
+        console.log("all users: ", users)
         allUsers = [...users];
 
         users.forEach((user, index) => {
@@ -1536,11 +1589,111 @@ if (auth == undefined) {
               JQueryUI: true,
               ordering: true,
               paging: false,
+              language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Search"
+              }
             });
           }
         });
       });
     }
+    
+    // function to edit customer
+    $.fn.editCustomer = function (index) {
+      // user_index = index;
+      $("#customerModal").modal("hide");
+
+      // $(".perms").show();
+
+      $("#customer_id_edit").val(allCustomers[index]._id);
+      $("#userNameEdit").val(allCustomers[index].name);
+      $("#phoneNumberEdit").val(allCustomers[index].phone);
+      $("#emailAddressEdit").val(allCustomers[index].email);
+      $("#userAddressEdit").val(allCustomers[index].address);
+
+      $("#editCustomer").modal("show");
+    };
+
+    // delete customer
+    $.fn.deleteCustomer = function (id) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to delete this user.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete!",
+      }).then((result) => {
+        if (result.value) {
+          $.ajax({
+            url: api + "customers/customer/" + id,
+            type: "DELETE",
+            success: function (result) {
+              console.log("customer deleted:", result);
+              loadCustomerList();
+              Swal.fire("Done!", "User deleted", "success");
+            },
+            error: function (xhr, status, error) {
+              console.log("deleteCustomer error with status:", status);
+              console.log("deleteCustomer error with error:", error);
+            },
+          });
+        }
+      });
+    };
+    
+    // function to load customers
+    function loadCustomerList() {
+      let counter = 0;
+      let customer_list = "";
+      $("#customer_list").empty();
+      $("#customerList").DataTable().destroy();
+
+      $.get(api + "customers/all", function (customers) {
+        allCustomers = [...customers];
+
+        customers.forEach((customer, index) => {
+          counter++;
+          customer_list += `<tr>
+            <td>${customer.name}</td>
+            <td>${customer.phone}</td>
+            <td>${customer.email}</td>
+            <td>${customer.address}</td>
+            <td>${
+              customer._id == 1
+                ? '<span class="btn-group"><button class="btn btn-dark"><i class="fa fa-edit"></i></button><button class="btn btn-dark"><i class="fa fa-trash"></i></button></span>'
+                : '<span class="btn-group"><button onClick="$(this).editCustomer(' +
+                  index +
+                  ')" class="btn btn-warning"><i class="fa fa-edit"></i></button><button onClick="$(this).deleteCustomer(' +
+                  customer._id +
+                  ')" class="btn btn-danger"><i class="fa fa-trash"></i></button></span>'
+            }</td></tr>`;
+
+          if (counter == customers.length) {
+            $("#customer_list").html(customer_list);
+
+            $("#customerList").DataTable({
+              order: [[1, "desc"]],
+              autoWidth: false,
+              info: true,
+              JQueryUI: true,
+              ordering: true,
+              paging: true,
+              language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Search"
+              }
+            });
+          }
+        });
+      });
+    }
+
+    $("#viewCustomerOrders").click(function () {
+      loadCustomerList();
+    });
 
     function loadProductList() {
       let products = [...allProducts];
@@ -1578,7 +1731,7 @@ if (auth == undefined) {
           $("#product_list").html(product_list);
 
           products.forEach((pro) => {
-            $("#" + pro.barcode + "").JsBarcode(pro.barcode, {
+            $("#" + pro?.barcode + "").JsBarcode(pro?.barcode, {
               width: 2,
               height: 25,
               fontSize: 14,
@@ -1592,6 +1745,10 @@ if (auth == undefined) {
             JQueryUI: true,
             ordering: true,
             paging: true,
+            language: {
+              search: "_INPUT_",
+              searchPlaceholder: "Search"
+            }
           });
         }
       });
@@ -1620,6 +1777,10 @@ if (auth == undefined) {
           JQueryUI: true,
           ordering: true,
           paging: false,
+          language: {
+            search: "_INPUT_",
+            searchPlaceholder: "Search"
+          }
         });
       }
     }
@@ -2029,6 +2190,10 @@ function loadTransactions() {
             paging: true,
             dom: "Bfrtip",
             buttons: ["csv", "excel", "pdf"],
+            language: {
+              search: "_INPUT_",
+              searchPlaceholder: "Search transactions..."
+            }
           });
         }
       });

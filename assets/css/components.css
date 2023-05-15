@@ -1,8 +1,27 @@
 @import "~bootstrap/scss/bootstrap";
-/* start */
-.leftMargin{
-  margin-left: -150px !important;
+/* start of custome styles*/
+.leftMargin {
+  margin-left: -110px !important;
+  width: 65% !important;
+  overflow-x: auto !important;
 }
+
+/* Style the scrollbar */
+.leftMargin::-webkit-scrollbar {
+  height: 8px;
+}
+
+/* Style the scrollbar thumb */
+.leftMargin::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+/* Make the scrollbar track transparent */
+.leftMargin::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
 .bannerDisplay{
   display: flex !important;
   flex-direction: row !important;
@@ -12,8 +31,10 @@
 }
 .sales-banner,
 .items-banner,
+.products-banner,
 .transactions-banner{
   margin-right: 10px !important;
+  height: 100px !important;
 }
 .cart-image-wrapper{
   border-radius: 50% !important;
@@ -55,9 +76,29 @@
 }
 .page-link{
   color: white;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  height: 100% !important;
 }
 
-/* end */
+.dataTables_wrapper .dt-button {
+  border: 1px solid rgb(246, 248, 253) !important;
+  border-radius: 5px !important;
+  padding: 5px 20px !important;
+  font-size: 16px !important;
+}
+
+
+.dataTables_wrapper .dt-button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* end of custom styles */
+
+
 .btn {
   border-radius: 3px;
   outline: none !important;

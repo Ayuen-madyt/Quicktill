@@ -94,7 +94,7 @@ app.post( "/product", upload.single('imagename'), function ( req, res ) {
         quantity: req.body.quantity == "" ? 0 : req.body.quantity,
         name: req.body.name,
         stock: req.body.stock == "on" ? 0 : 1,  
-        barcode: req.body.barcode,  
+        barcode: req.body.barcode?req.body.barcode: parseInt(req.body.id),  
         img: image        
     }
 
