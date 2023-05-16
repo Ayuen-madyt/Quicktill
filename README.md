@@ -1,4 +1,4 @@
-# Qucik Till Point of Sale
+# Quick Till Point of Sale
 
 ![POS](screenshots/quicktill_pos.png)
 
