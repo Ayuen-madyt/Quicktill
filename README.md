@@ -15,21 +15,18 @@
 - Filter Transactions by Till, Cashier or Status. 
 - Filter Transactions by Date Range. 
 
- **To use on Windows:**
- [Download](http://www.storepointofsale.com/download/v1/StorePOS.msi) the MSI Installer
-
-The default username and password is  **admin**
-
-  **Looking for a Desktop Invoicing app?**
-  
- Check out the [Offline Invoicing](https://github.com/tngoman/Offline_Invoicing) app for freelancers.
-
 **To Customize/Create your own installer**
 
 - Clone this project.
 - Open terminal and navigate into the cloned folder.
-- Run "npm install" to install dependencies.
-- Run "npm run electron". 
+- Run "yarn install" to install dependencies.
+- Run "yarn electron". 
+
+**To build the app**
+
+- Open terminal and navigate into the cloned folder.
+- Run "yarn electron-build" to build.
+- A dist folder is created where the app is located. 
 
 ![POS](https://github.com/tngoman/Store-POS/blob/master/screenshots/pos.jpg)
 
