@@ -31,11 +31,13 @@ The default username and password is  **admin**
 - Run "npm install" to install dependencies.
 - Run "npm run electron". 
 
-![POS](https://github.com/tngoman/Store-POS/blob/master/screenshots/pos.jpg)
+![POS](https://github.com/tngoman/Store-POS/blob/master/screenshots/quicktill_pos.png)
 
-![Transactions](https://github.com/tngoman/Store-POS/blob/master/screenshots/transactions.jpg)
+![Transactions](https://github.com/tngoman/Store-POS/blob/master/screenshots/quicktill_transactions.png)
 
-![Receipt](https://github.com/tngoman/Store-POS/blob/master/screenshots/receipt.jpg)
+![Receipt](https://github.com/tngoman/Store-POS/blob/master/screenshots/quicktill_print.png)
+
+![Products](https://github.com/tngoman/Store-POS/blob/master/screenshots/quicktill_products.png)
 
 ![Permissions](https://github.com/tngoman/Store-POS/blob/master/screenshots/permissions.jpg)
 

@@ -2,7 +2,7 @@
   "name": "QuickTill",
   "version": "0.1.0",
   "description": "Quick Till of Sale is a desktop application developed by Raedal Technologies",
-  "author": "Hosting Domain",
+  "author": "Raedal Technologies",
   "private": true,
   "main": "start.js",
   "build": {
