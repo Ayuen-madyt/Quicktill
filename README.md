@@ -28,16 +28,16 @@
 - Run "yarn electron-build" to build.
 - A dist folder is created where the app is located. 
 
-![POS](https://github.com/Ayuen-madyt/Quicktill/blob/master/screenshots/quicktill_pos.png)
+![POS](screenshots/quicktill_pos.png)
 
-![Transactions](https://github.com/Ayuen-madyt/Quicktill/blob/master/screenshots/quicktill_transactions.png)
+![Transactions](screenshots/quicktill_transactions.png)
 
-![Receipt](https://github.com/Ayuen-madyt/Quicktill/blob/master/screenshots/quicktill_print.png)
+![Receipt](screenshots/quicktill_print.png)
 
-![Products](https://github.com/Ayuen-madyt/Quicktill/blob/master/screenshots/quicktill_products.png)
+![Products](screenshots/quicktill_products.png)
 
-![Permissions](https://github.com/Ayuen-madyt/Quicktill/blob/master/screenshots/quicktill_permissions.png)
+![Permissions](screenshots/quicktill_permissions.png)
 
-![Customers](https://github.com/Ayuen-madyt/Quicktill/blob/master/screenshots/quicktill_customers.png)
+![Customers](screenshots/quicktill_customers.png)
 
-![Users](https://github.com/Ayuen-madyt/Quicktill/blob/master/screenshots/quicktill_users.png)
+![Users](screenshots/quicktill_users.png)
