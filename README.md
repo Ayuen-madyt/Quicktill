@@ -28,14 +28,16 @@
 - Run "yarn electron-build" to build.
 - A dist folder is created where the app is located. 
 
-![POS](https://github.com/tngoman/Store-POS/blob/master/screenshots/quicktill_pos.png)
+![POS](https://github.com/Ayuen-madyt/Quicktill/blob/master/screenshots/quicktill_pos.png)
 
-![Transactions](https://github.com/tngoman/Store-POS/blob/master/screenshots/quicktill_transactions.png)
+![Transactions](https://github.com/Ayuen-madyt/Quicktill/blob/master/screenshots/quicktill_transactions.png)
 
-![Receipt](https://github.com/tngoman/Store-POS/blob/master/screenshots/quicktill_print.png)
+![Receipt](https://github.com/Ayuen-madyt/Quicktill/blob/master/screenshots/quicktill_print.png)
 
-![Products](https://github.com/tngoman/Store-POS/blob/master/screenshots/quicktill_products.png)
+![Products](https://github.com/Ayuen-madyt/Quicktill/blob/master/screenshots/quicktill_products.png)
 
-![Permissions](https://github.com/tngoman/Store-POS/blob/master/screenshots/permissions.jpg)
+![Permissions](https://github.com/Ayuen-madyt/Quicktill/blob/master/screenshots/quicktill_permissions.png)
 
-![Users](https://github.com/tngoman/Store-POS/blob/master/screenshots/users.jpg)
+![Customers](https://github.com/Ayuen-madyt/Quicktill/blob/master/screenshots/quicktill_customers.png)
+
+![Users](https://github.com/Ayuen-madyt/Quicktill/blob/master/screenshots/quicktill_users.png)
