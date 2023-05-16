@@ -1,4 +1,4 @@
-# Store Point of Sale
+# Qucik Till Point of Sale
  Desktop Point of Sale app built with electron
  
   **Features:**
