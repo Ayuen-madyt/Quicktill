@@ -1,4 +1,8 @@
 # Qucik Till Point of Sale
+
+![POS](screenshots/quicktill_pos.png)
+
+
  Desktop Point of Sale app built with electron
  
   **Features:**
@@ -28,9 +32,9 @@
 - Run "yarn electron-build" to build.
 - A dist folder is created where the app is located. 
 
-![POS](screenshots/quicktill_pos.png)
 
-![Transactions](screenshots/quicktill_transactions.png)
+
+<!-- ![Transactions](screenshots/quicktill_transactions.png)
 
 ![Receipt](screenshots/quicktill_print.png)
 
@@ -40,4 +44,4 @@
 
 ![Customers](screenshots/quicktill_customers.png)
 
-![Users](screenshots/quicktill_users.png)
+![Users](screenshots/quicktill_users.png) -->
