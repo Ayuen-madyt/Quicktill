@@ -58,6 +58,7 @@
     "multer": "^1.4.2",
     "nedb": "^1.8.0",
     "nodemon": "^1.14.12",
+    "notiflix": "^3.2.6",
     "path": "^0.12.7",
     "print-js": "^1.0.63",
     "socket.io": "^2.4.0",
@@ -86,11 +87,10 @@
       "last 1 safari version"
     ]
   },
- 
   "devDependencies": {
     "cross-env": "^6.0.3",
-    "electron-builder": "^21.2.0",
     "electron": ">=13.6.6",
+    "electron-builder": "^21.2.0",
     "electron-is-dev": "^1.1.0",
     "nodemon": "^1.19.3"
   }

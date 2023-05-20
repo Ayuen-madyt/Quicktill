@@ -24,6 +24,7 @@ let user_index = 0;
 let product_index = 0;
 let transaction_index;
 let host = "localhost";
+let notiflix = require("notiflix");
 let path = require("path");
 let port = "8001";
 let moment = require("moment");
@@ -206,57 +207,89 @@ if (auth == undefined) {
     }
 
     // function to load products
-    function loadProducts(pageNumber = 1, pageSize = 18) {
+    function loadProducts() {
       $.get(api + "inventory/products", function (data) {
         data.forEach((item) => {
           item.price = parseFloat(item.price).toFixed(2);
         });
 
         allProducts = [...data];
+        loadProductList();
+        const capitalizeFirstLetter = word => `${word.charAt(0).toUpperCase()}${word.slice(1)}`;
 
-        const startIndex = (pageNumber - 1) * pageSize;
-        const pageProducts = allProducts.slice(
-          startIndex,
-          startIndex + pageSize
-        );
-
-        loadProductList(pageProducts);
+        let delay = 0;
+        allProducts?.forEach((product) => {
+          if (product.quantity <= 5 && product.quantity > 2) {
+            notiflix.Notify.init({
+              position: "right-bottom",
+              cssAnimationDuration: 600,
+              timeout: 4000 + delay,
+              messageMaxLength: 150,
+              cssAnimationStyle: "from-bottom",
+            });
+            notiflix.Notify.warning(
+              `${capitalizeFirstLetter(product.name)} has only ${product.quantity} left in the inventory`
+            );
+          } else if (product.quantity >=1 && product.quantity <= 2) {
+            notiflix.Notify.init({
+              position: "right-bottom",
+              cssAnimationDuration: 600,
+              timeout: 8000 + delay * 2,
+              messageMaxLength: 150,
+              cssAnimationStyle: "from-bottom",
+            });
+            notiflix.Notify.failure(
+              `${capitalizeFirstLetter(product.name)} has only ${product.quantity} left in the inventory`
+            );
+          }
+          else if (product.quantity < 1) {
+            notiflix.Notify.init({
+              position: "right-bottom",
+              cssAnimationDuration: 600,
+              timeout: 8000 + delay * 2,
+              messageMaxLength: 150,
+              cssAnimationStyle: "from-bottom",
+            });
+            notiflix.Notify.failure(
+              `${capitalizeFirstLetter(product.name)} is out of stock. Please restock.`
+            );
+          }
+          delay += 100;
+        });
 
         $("#parent").text("");
         $("#categories").html(
           `<button type="button" id="all" class="btn btn-categories btn-white waves-effect waves-light">All</button> `
         );
 
-        pageProducts.forEach((item) => {
+        data.forEach((item) => {
           if (!categories.includes(item.category)) {
             categories.push(item.category);
           }
 
           let item_info = `<div class="col-lg-2 box ${item.category}"
-                                    onclick="$(this).addToCart(${item._id}, ${
+                          onclick="$(this).addToCart(${item._id}, ${
             item.quantity
           }, ${item.stock})">
-                                <div class="widget-panel widget-style-2 ">                    
-                                <div id="image"><img src="${
-                                  item.img == ""
-                                    ? "./assets/images/default.jpg"
-                                    : img_path + item.img
-                                }" id="product_img" alt=""></div>                    
-                                            <div class="text-muted m-t-5 text-center">
-                                            <div class="name" id="product_name">${
-                                              item.name
-                                            }</div> 
-                                            <span class="sku">${item.sku}</span>
-                                            <span class="stock">STOCK </span><span class="count">${
-                                              item.stock == 1
-                                                ? item.quantity
-                                                : "N/A"
-                                            }</span></div>
-                                            <sp class="text-success text-center"><b data-plugin="counterup">${
-                                              settings.symbol + item.price
-                                            }</b> </sp>
-                                </div>
-                            </div>`;
+                      <div class="widget-panel widget-style-2 ">                    
+                      <div id="image"><img src="${
+                        item.img == ""
+                          ? "./assets/images/default.jpg"
+                          : img_path + item.img
+                      }" id="product_img" alt=""></div>                    
+                                  <div class="text-muted m-t-5 text-center">
+                                  <div class="name" id="product_name">${
+                                    item.name
+                                  }</div> 
+                                  <span class="sku">${item.sku}</span>
+                                  <span class="stock">STOCK </span><span class="count">${
+                                    item.stock == 1 ? item.quantity : "N/A"
+                                  }</span></div>
+                                  <sp class="text-success text-center"><b data-plugin="counterup">${
+                                    settings.symbol + item.price
+                                  }</b> </sp>
+                      </div>
+                  </div>`;
           $("#parent").append(item_info);
         });
 
@@ -264,101 +297,15 @@ if (auth == undefined) {
           let c = allCategories.filter(function (ctg) {
             return ctg._id == category;
           });
+
           $("#categories").append(
             `<button type="button" id="${category}" class="btn btn-categories btn-white waves-effect waves-light">${
               c.length > 0 ? c[0].name : ""
             }</button> `
           );
         });
-
-        addPagination(pageNumber, pageSize, allProducts.length);
-
-        $("#pagination").on("click", "a.page-link", function (e) {
-          e.preventDefault();
-          const pageNum = parseInt($(this).text());
-          onPageClick(pageNum, pageSize, allProducts.length);
-        });
       });
     }
-
-    function addPagination(pageNumber, pageSize, totalItems, options = {}) {
-      const totalPages = Math.ceil(totalItems / pageSize);
-      const {
-        visiblePages = 5,
-        pagesBeforeCurrent = 2,
-        pagesAfterCurrent = 2,
-        ellipsisText = "...",
-      } = options;
-      const visibleStart = Math.max(1, pageNumber - pagesBeforeCurrent);
-      const visibleEnd = Math.min(totalPages, pageNumber + pagesAfterCurrent);
-      let paginationHtml = "";
-
-      for (let i = visibleStart; i <= visibleEnd; i++) {
-        paginationHtml += `<li class="page-item ${
-          i === pageNumber ? "active" : ""
-        }"><a class="page-link" href="#" onclick="loadProducts(${i}, ${pageSize})">${i}</a></li>`;
-      }
-
-      if (visibleStart > 1) {
-        paginationHtml = `<li class="page-item"><a class="page-link" href="#" onclick="loadProducts(1, ${pageSize})">1</a></li>${ellipsisText}${paginationHtml}`;
-      }
-
-      if (visibleEnd < totalPages) {
-        paginationHtml += `${ellipsisText}<li class="page-item"><a class="page-link" href="#" onclick="loadProducts(${totalPages}, ${pageSize})">${totalPages}</a></li>`;
-      }
-
-      $("#pagination").html(paginationHtml);
-    }
-
-    // on clicking page number
-    function onPageClick(pageNumber, pageSize, totalItems) {
-      const startIndex = (pageNumber - 1) * pageSize;
-      const pageProducts = allProducts.slice(startIndex, startIndex + pageSize);
-
-      loadProductList(pageProducts);
-
-      $("#parent").text("");
-
-      pageProducts.forEach((item) => {
-        if (!categories.includes(item.category)) {
-          categories.push(item.category);
-        }
-
-        let item_info = `<div class="col-lg-2 box ${item.category}"
-                                  onclick="$(this).addToCart(${item._id}, ${
-          item.quantity
-        }, ${item.stock})">
-                                      <div class="widget-panel widget-style-2 ">
-                                          <div id="image"><img src="${
-                                            item.img == ""
-                                              ? "./assets/images/default.jpg"
-                                              : img_path + item.img
-                                          }" id="product_img" alt=""></div>                    
-                                          <div class="text-muted m-t-5 text-center">
-                                              <div class="name" id="product_name">${
-                                                item.name
-                                              }</div> 
-                                              <span class="sku">${
-                                                item.sku
-                                              }</span>
-                                              <span class="stock">STOCK </span><span class="count">${
-                                                item.stock == 1
-                                                  ? item.quantity
-                                                  : "N/A"
-                                              }</span>
-                                          </div>
-                                          <sp class="text-success text-center"><b data-plugin="counterup">${
-                                            settings.symbol + item.price
-                                          }</b></sp>
-                                      </div>
-                                  </div>`;
-        $("#parent").append(item_info);
-      });
-
-      addPagination(pageNumber, pageSize, totalItems);
-    }
-
-    // end
 
     function loadCategories() {
       $.get(api + "categories/all", function (data) {
@@ -689,24 +636,24 @@ if (auth == undefined) {
       alert("print job complete");
     }
 
-    $(document).ready(function() {
-      $('.list-group-item').click(function() {
+    $(document).ready(function () {
+      $(".list-group-item").click(function () {
         var buttonValue = $(this).text().trim();
-        if(buttonValue=="Cash"){
-          paymentType = 1
+        if (buttonValue == "Cash") {
+          paymentType = 1;
         }
-       if(buttonValue=="Card"){
-        paymentType= 2
-       }
-       if(buttonValue=="Mpesa"){
-        paymentType = 3
-      }
+        if (buttonValue == "Card") {
+          paymentType = 2;
+        }
+        if (buttonValue == "Mpesa") {
+          paymentType = 3;
+        }
       });
     });
 
     $.fn.submitDueOrder = function (status) {
       // setting value of card info/mpesa code to empty
-      $("#paymentInfo").val("")
+      $("#paymentInfo").val("");
 
       let items = "";
       let payment = 0;
@@ -1538,7 +1485,7 @@ if (auth == undefined) {
       $("#userList").DataTable().destroy();
 
       $.get(api + "users/all", function (users) {
-        console.log("all users: ", users)
+        console.log("all users: ", users);
         allUsers = [...users];
 
         users.forEach((user, index) => {
@@ -1591,14 +1538,14 @@ if (auth == undefined) {
               paging: false,
               language: {
                 search: "_INPUT_",
-                searchPlaceholder: "Search"
-              }
+                searchPlaceholder: "Search",
+              },
             });
           }
         });
       });
     }
-    
+
     // function to edit customer
     $.fn.editCustomer = function (index) {
       // user_index = index;
@@ -1643,7 +1590,7 @@ if (auth == undefined) {
         }
       });
     };
-    
+
     // function to load customers
     function loadCustomerList() {
       let counter = 0;
@@ -1683,8 +1630,8 @@ if (auth == undefined) {
               paging: true,
               language: {
                 search: "_INPUT_",
-                searchPlaceholder: "Search"
-              }
+                searchPlaceholder: "Search",
+              },
             });
           }
         });
@@ -1747,8 +1694,8 @@ if (auth == undefined) {
             paging: true,
             language: {
               search: "_INPUT_",
-              searchPlaceholder: "Search"
-            }
+              searchPlaceholder: "Search",
+            },
           });
         }
       });
@@ -1779,8 +1726,8 @@ if (auth == undefined) {
           paging: false,
           language: {
             search: "_INPUT_",
-            searchPlaceholder: "Search"
-          }
+            searchPlaceholder: "Search",
+          },
         });
       }
     }
@@ -1865,8 +1812,8 @@ if (auth == undefined) {
     });
 
     function isNumeric(n) {
-        return !isNaN(parseFloat(n)) && isFinite(n);
-      }
+      return !isNaN(parseFloat(n)) && isFinite(n);
+    }
 
     $("#net_settings_form").on("submit", function (e) {
       e.preventDefault();
@@ -2140,7 +2087,7 @@ function loadTransactions() {
                                       ')" class="btn btn-info"><i class="fa fa-search-plus"></i></button></td>'
                                 }</tr>
                     `;
-        
+
         if (counter == transactions?.length) {
           $("#total_sales #counter").text(
             settings.symbol + parseFloat(sales).toFixed(2)
@@ -2192,8 +2139,8 @@ function loadTransactions() {
             buttons: ["csv", "excel", "pdf"],
             language: {
               search: "_INPUT_",
-              searchPlaceholder: "Search transactions..."
-            }
+              searchPlaceholder: "Search transactions...",
+            },
           });
         }
       });
@@ -2345,12 +2292,14 @@ $.fn.viewTransaction = function (index) {
                     <td>:</td>
                     <td>${allTransactions[index]?.payment_type}</td>
                 </tr>
-                ${allTransactions[index]?.payment_info && 
-                `<tr>
+                ${
+                  allTransactions[index]?.payment_info &&
+                  `<tr>
                     <td>Transaction Code</td>
                     <td>:</td>
                     <td>${allTransactions[index]?.payment_info}</td>
-                </tr>`}`;
+                </tr>`
+                }`;
   }
 
   if (settings.charge_tax) {
@@ -2413,7 +2362,9 @@ $.fn.viewTransaction = function (index) {
         <tr>                        
             <td><b>Subtotal</b></td>
             <td>:</td>
-            <td><b>${settings.symbol}${allTransactions[index]?.subtotal}</b></td>
+            <td><b>${settings.symbol}${
+    allTransactions[index]?.subtotal
+  }</b></td>
         </tr>
         <tr>
             <td>Discount</td>

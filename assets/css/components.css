@@ -55,33 +55,6 @@
   width: 25px !important;
   height: 25px !important
 }
-.page-numbers{
-  display: flex !important;
-  flex-direction: row !important;
-  justify-content: center !important;
-  list-style-type: none;
-}
-.page-item {
-  display: flex !important;
-  flex-direction: row !important;
-  justify-content: center !important;
-  align-items: center;
-  background-color: teal;
-  width: 40px;
-  height: 40px;
-  margin-right: 10px;
-}
-.product-container{
-  height: fit-content !important;
-}
-.page-link{
-  color: white;
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  width: 100% !important;
-  height: 100% !important;
-}
 
 .dataTables_wrapper .dt-button {
   border: 1px solid rgb(246, 248, 253) !important;
@@ -95,6 +68,28 @@
   outline: none;
   box-shadow: none;
 }
+
+/* Hide the default scrollbar */
+#parent::-webkit-scrollbar {
+  width: 0.5em; /* Adjust the width as needed */
+}
+
+/* Track */
+#parent::-webkit-scrollbar-track {
+  background: transparent; /* Set the track color to transparent */
+}
+
+/* Handle */
+#parent::-webkit-scrollbar-thumb {
+  background-color: transparent; /* Set the handle color to transparent */
+  border-radius: 0.25em; /* Adjust the border radius as needed */
+}
+
+/* Show hover effect on scrollbar */
+#parent::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.2); /* Set the hover color for the handle */
+}
+
 
 /* end of custom styles */
 
