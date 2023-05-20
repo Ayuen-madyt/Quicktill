@@ -96,24 +96,26 @@ app.get("/by-date", function(req, res) {
 });
 
 
-
 app.post("/new", function(req, res) {
   let newTransaction = req.body;
   transactionsDB.insert(newTransaction, function(err, transaction) {    
-    if (err) res.status(500).send(err);
-    else {
-      if(newTransaction.paid >= newTransaction.total){
-        Inventory.decrementInventory(newTransaction.items, function(err, result) {
-          if (err) res.status(500).send(err);
-          else res.status(200).send("Inventory updated successfully.");
-        });
-      } else {
-        res.status(200).send("Transaction created successfully.");
-      }
+    if (err) {
+      return res.status(500).send(err);
     }
+
+    // Handle transaction creation successfully
+    res.status(200).send("Transaction created successfully.");
+
+    // Call app.decrementInventory regardless of paid amount
+    Inventory.decrementInventory(newTransaction.items, function(err, result) {
+      if (err) {
+        console.error("Error decrementing inventory:", err);
+      } else {
+        console.log("Inventory updated successfully.");
+      }
+    });
   });
 });
-
 
 
 
