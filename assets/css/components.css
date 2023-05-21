@@ -69,6 +69,16 @@
   box-shadow: none;
 }
 
+.fill-button{
+  height: 20px !important;
+  margin-left: 80px !important;
+  margin-top: -20px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
 /* Hide the default scrollbar */
 #parent::-webkit-scrollbar {
   width: 0.5em; /* Adjust the width as needed */

@@ -215,7 +215,8 @@ if (auth == undefined) {
 
         allProducts = [...data];
         loadProductList();
-        const capitalizeFirstLetter = word => `${word.charAt(0).toUpperCase()}${word.slice(1)}`;
+        const capitalizeFirstLetter = (word) =>
+          `${word.charAt(0).toUpperCase()}${word.slice(1)}`;
 
         let delay = 0;
         allProducts?.forEach((product) => {
@@ -228,9 +229,11 @@ if (auth == undefined) {
               cssAnimationStyle: "from-bottom",
             });
             notiflix.Notify.warning(
-              `${capitalizeFirstLetter(product.name)} has only ${product.quantity} left in the inventory`
+              `${capitalizeFirstLetter(product.name)} has only ${
+                product.quantity
+              } left in the inventory`
             );
-          } else if (product.quantity >=1 && product.quantity <= 2) {
+          } else if (product.quantity >= 1 && product.quantity <= 2) {
             notiflix.Notify.init({
               position: "right-bottom",
               cssAnimationDuration: 600,
@@ -239,10 +242,11 @@ if (auth == undefined) {
               cssAnimationStyle: "from-bottom",
             });
             notiflix.Notify.failure(
-              `${capitalizeFirstLetter(product.name)} has only ${product.quantity} left in the inventory`
+              `${capitalizeFirstLetter(product.name)} has only ${
+                product.quantity
+              } left in the inventory`
             );
-          }
-          else if (product.quantity < 1) {
+          } else if (product.quantity < 1) {
             notiflix.Notify.init({
               position: "right-bottom",
               cssAnimationDuration: 600,
@@ -251,7 +255,9 @@ if (auth == undefined) {
               cssAnimationStyle: "from-bottom",
             });
             notiflix.Notify.failure(
-              `${capitalizeFirstLetter(product.name)} is out of stock. Please restock.`
+              `${capitalizeFirstLetter(
+                product.name
+              )} is out of stock. Please restock.`
             );
           }
           delay += 100;
@@ -1345,6 +1351,89 @@ if (auth == undefined) {
       $(".perms").hide();
     });
 
+    // function to print barcodes
+    $.fn.printBarcode = function (productName, barcode, price) {
+      const canvas = document.createElement("canvas");
+      // Generate the barcode using jsbarcode
+      JsBarcode(canvas, barcode, {
+        format: "CODE128",
+        displayValue: true,
+        text: barcode,
+        height: 40,
+        margin: 0,
+      });
+
+      // Convert the canvas to an image URL
+      const imageDataUrl = canvas.toDataURL("image/png");
+
+      // Truncate the product name if it's too long
+      const maxLength = 15;
+
+      // Concatenate the truncated product name and price
+      const headerText = `${productName} - ${settings.symbol + price}`;
+      const headerText2 = `${productName}\n${settings.symbol + price}`;
+
+      // Print the barcode using PrintJS
+      printJS({
+        printable: imageDataUrl,
+        type: "image",
+        header: productName.length > maxLength ? headerText2 : headerText, // Set the truncated product name and price as the header
+        headerStyle:
+          "font-size: 15px; margin-bottom: 4px; white-space: pre-wrap;",
+        onPrintDialogClose: function () {
+          console.log("Print dialog closed");
+        },
+      });
+    };
+
+    // Function to generate a random barcode value
+    function generateBarcodeValue() {
+      var barcodeDigits = [];
+
+      // Generate 11 random digits for the barcode
+      for (var i = 0; i < 11; i++) {
+        var digit = Math.floor(Math.random() * 10);
+        barcodeDigits.push(digit);
+      }
+
+      // Calculate the checksum digit
+      var sumOdd = 0;
+      var sumEven = 0;
+
+      for (var j = 0; j < 11; j++) {
+        if (j % 2 === 0) {
+          sumOdd += barcodeDigits[j];
+        } else {
+          sumEven += barcodeDigits[j];
+        }
+      }
+
+      var checksum = (sumOdd * 3 + sumEven) % 10;
+      if (checksum !== 0) {
+        checksum = 10 - checksum;
+      }
+
+      barcodeDigits.push(checksum);
+
+      // Convert the barcode digits to a string
+      var barcodeValue = barcodeDigits.join("");
+
+      return barcodeValue;
+    }
+
+    // generating barcode when fill button is clicked
+    $("#fill_barcode").click(function () {
+      var barcodeInput = $("#product_barcode");
+
+      // Check if the input field is empty
+      if (barcodeInput.val().trim() === "") {
+        // Generate a random barcode value (you can modify this logic as needed)
+        var barcodeValue = generateBarcodeValue();
+        // Set the input field value to the generated barcode
+        barcodeInput.val(barcodeValue);
+      }
+    });
+
     $.fn.editUser = function (index) {
       user_index = index;
 
@@ -1670,9 +1759,19 @@ if (auth == undefined) {
             <td>${settings.symbol}${product.price}</td>
             <td>${product.stock == 1 ? product.quantity : "N/A"}</td>
             <td>${category.length > 0 ? category[0].name : ""}</td>
-            <td class="nobr"><span class="btn-group"><button onClick="$(this).editProduct(${index})" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button><button onClick="$(this).deleteProduct(${
-            product._id
-          })" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button></span></td></tr>`;
+            <td class="nobr">
+            <span class="btn-group" style="display: flex;">
+              <button onClick="$(this).printBarcode('${product.name}', '${
+            product.barcode
+          }', '${
+            product.price
+          }')" class="btn btn-dark btn-sm" title="Print barcode"><i class="fa fa-print"></i></button>
+              <button onClick="$(this).editProduct(${index})" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
+              <button onClick="$(this).deleteProduct(${
+                product._id
+              })" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+            </span>
+          </td>`;
 
         if (counter == allProducts.length) {
           $("#product_list").html(product_list);
