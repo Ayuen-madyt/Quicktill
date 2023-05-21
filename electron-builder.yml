@@ -1,0 +1,5 @@
+appId: quicktill.app
+publish:
+  provider: github
+  owner: Ayuen-madyt
+  repo: https://github.com/Ayuen-madyt/Quicktill

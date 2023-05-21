@@ -6,7 +6,7 @@ const rootPath = path.join('./');
 resultPromise = electronInstaller.createWindowsInstaller({
     appDirectory: './release-builds/POS-win32-x64',
     outputDirectory: './installers',
-    authors: 'Hosting Domain',
+    authors: 'Raedal Technologies',
     noMsi: true,
     exe: 'pos.exe',
     setupExe: 'POSInstaller.exe',
