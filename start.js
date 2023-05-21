@@ -13,6 +13,24 @@ const server = require('./server');
 const {app, BrowserWindow, ipcMain} = require('electron');
 const path = require('path')
 
+// Set the log file location
+log.transports.file.file = `${app.getPath('userData')}/quicktill.log`;
+
+// Set the log level (optional)
+log.transports.file.level = 'info'; // or 'debug', 'warn', 'error', etc.
+
+// Configure other options (optional)
+log.transports.file.format = '{h}:{i}:{s} {level} {text}';
+
+// Add logging to console (optional)
+log.transports.console.level = false; // Disable console logging
+
+// Initialize the logger
+log.catchErrors();
+
+// Usage example
+log.info('App started');
+
 const contextMenu = require('electron-context-menu');
 
 let mainWindow
