@@ -28,13 +28,19 @@
   justify-content: space-between !important;
   align-items: center !important;
   margin-top: 10px;
+  margin-bottom: -5px;
 }
 .sales-banner,
 .items-banner,
 .products-banner,
 .transactions-banner{
   margin-right: 10px !important;
-  height: 100px !important;
+  height: fit-content !important;
+}
+#counter{
+  font-size: 25px !important;
+  font-weight: bold !important;
+  margin-bottom: 5px !important;
 }
 .cart-image-wrapper{
   border-radius: 50% !important;
@@ -76,6 +82,21 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.graph-area {
+  /* background-color: white !important; */
+  height: 200px;
+  margin-bottom: 10px;
+  /* padding: 10px; */
+}
+
+#myChart {
+  width: 100% !important;
+  height: 100% !important; /* Ensure the chart occupies the full height of its container */
+  background-color: white !important;
+  padding: 10px;
+  border-radius: 5px !important;
 }
 
 
