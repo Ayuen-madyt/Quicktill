@@ -84,22 +84,6 @@
   align-items: center;
 }
 
-.graph-area {
-  /* background-color: white !important; */
-  height: 200px;
-  margin-bottom: 10px;
-  /* padding: 10px; */
-}
-
-#myChart {
-  width: 100% !important;
-  height: 100% !important; /* Ensure the chart occupies the full height of its container */
-  background-color: white !important;
-  padding: 10px;
-  border-radius: 5px !important;
-}
-
-
 /* Hide the default scrollbar */
 #parent::-webkit-scrollbar {
   width: 0.5em; /* Adjust the width as needed */

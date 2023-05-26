@@ -43,7 +43,6 @@ let jsPDF = require("jspdf");
 let html2canvas = require("html2canvas");
 let JsBarcode = require("jsbarcode");
 let macaddress = require("macaddress");
-let Chart = require('chart.js/auto');
 let categories = [];
 let holdOrderList = [];
 let customerOrderList = [];
@@ -2117,106 +2116,6 @@ $.fn.print = function () {
   printJS({ printable: receipt, type: "raw-html" });
 };
 
-// function to generate chart
-const initialChartHeight = 300; // Adjust the initial height as needed
-function initializeChart(transactions) {
-  let chart = Chart.getChart("myChart");
-
-  // Prepare data for chart
-  const data = {
-    labels: [],
-    datasets: [
-      {
-        label: "SALES",
-        data: [],
-        backgroundColor: "",
-        borderColor: "rgba(75, 192, 192, 1)",
-        borderWidth: 1,
-        tension: 0.3,
-        fill: "origin",
-      },
-    ],
-  };
-
-  // Group transactions by day or month and calculate the sum of total for each period
-  const salesByPeriod = transactions.reduce((accumulator, transaction) => {
-    const date = new Date(transaction.date);
-    const period = date.toLocaleString("en-US", {
-      day: "numeric",
-      month: "short",
-    });
-    const total = parseFloat(transaction.total);
-
-    if (!accumulator[period]) {
-      accumulator[period] = 0;
-    }
-
-    accumulator[period] += total;
-
-    return accumulator;
-  }, {});
-
-  // Extract period and total values from salesByPeriod
-  Object.entries(salesByPeriod).forEach(([period, total]) => {
-    data.labels.push(period);
-    data.datasets[0].data.push(total);
-  });
-
-  // Destroy existing Chart instance if it exists
-  if (chart) {
-    chart.destroy();
-  }
-
-  // Reset chart canvas height to initial size
-  const chartCanvas = document.getElementById("myChart");
-  chartCanvas.style.height = initialChartHeight + "px";
-
-  // Configure and render the chart
-  const ctx = chartCanvas.getContext("2d");
-  const gradient = ctx.createLinearGradient(0, initialChartHeight, 0, 0);
-  gradient.addColorStop(0, "rgba(75, 192, 192, 0.1)"); // Start color (more faded)
-  gradient.addColorStop(1, "rgba(75, 192, 192, 1)"); // End color
-  data.datasets[0].backgroundColor = gradient;
-
-  const chartOptions = {
-    type: "line",
-    data: data,
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-          grid: {
-            color: (context) =>
-              context.tick.value === 0
-                ? "rgba(0, 0, 0, 0)"
-                : "rgba(0, 0, 0, 0.1)",
-            borderWidth: 1,
-          },
-          title: {
-            display: true,
-            text: "SALES",
-          },
-        },
-        x: {
-          title: {
-            display: true,
-            text: "DAYS",
-          },
-        },
-      },
-      maintainAspectRatio: false,
-    },
-  };
-
-  // Set the width and responsiveness of the chart's canvas
-  chartCanvas.style.width = "100%";
-  chartCanvas.style.maxWidth = "100%";
-  chartCanvas.style.margin = "0 auto";
-
-  // Create the chart
-  chart = new Chart(ctx, chartOptions);
-}
-
 function loadTransactions() {
   let tills = [];
   let users = [];
@@ -2237,7 +2136,6 @@ function loadTransactions() {
       $("#transactionList").DataTable().destroy();
 
       allTransactions = [...transactions];
-      initializeChart(transactions);
 
       transactions?.forEach((trans, index) => {
         const total = parseFloat(trans?.total);
