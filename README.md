@@ -17,7 +17,8 @@
 - Customer Database. 
 - Transaction History. 
 - Filter Transactions by Till, Cashier or Status. 
-- Filter Transactions by Date Range. 
+- Filter Transactions by Date Range.
+- Generate & print barcodes for each product
 
 **To Customize/Create your own installer**
 
