@@ -58,7 +58,7 @@ yarn electron
 
 #### Build
 
-To build Frappe Books and create an installer:
+To build Quicktill and create an installer:
 
 ```bash
 # start the electron app
