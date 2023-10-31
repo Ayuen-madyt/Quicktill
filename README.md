@@ -97,17 +97,6 @@ Thank you for your interest in contributing to Quicktill POS! This document outl
 - Include a concise summary of the changes made in the description.
 - Provide any relevant information or context that may help reviewers understand the purpose and impact of the changes.
 
-### Background of this project
-
-The Quicktill project has a notable background that demonstrates its origin and the motivation behind its development. Initially, I would like to express my gratitude to [tngoman](https://github.com/tngoman/Store-POS.git) for their valuable contribution to the original repository located at [https://github.com/tngoman/Store-POS.git](https://github.com/tngoman/Store-POS.git). The original project created by tngoman has proven to be highly effective and impactful within its domain.
-
-Due to the exceptional qualities and functionalities exhibited by the original Quicktill repository, I made the decision to maintain a forked version of the project. This decision was driven by the recognition of the project's potential to further enhance and provide valuable solutions within the realm of point-of-sale (POS) systems.
-
-By maintaining the forked version of Quicktill, I aim to continue the legacy of the project, fostering its growth and ensuring its longevity. The focus remains on improving the codebase, incorporating new features, enhancing performance, and addressing any reported issues or bugs. Through this endeavor, the intention is to provide a robust and reliable solution that meets the evolving needs of the users and the broader community.
-
-The Quicktill project represents a collaborative effort and welcomes contributions from individuals who share the vision of delivering a comprehensive and efficient POS system. Together, we strive to make Quicktill a leading choice for businesses seeking a reliable and customizable point-of-sale solution.
-
-Thank you to all the contributors, past and present, who have helped shape Quicktill into what it is today. Your dedication and support are invaluable in driving the success of this project.
 
 ## License
 
