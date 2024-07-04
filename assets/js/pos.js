@@ -844,7 +844,11 @@ if (auth == undefined) {
 
       if (status == 3) {
         if (cart.length > 0) {
-          printJS({ printable: receipt, type: "raw-html" });
+          printJS({
+            printable: receipt,
+            type: "raw-html",
+            style: "@page { size:A7 }",
+          });
 
           $(".loading").hide();
           return;
