@@ -36,7 +36,9 @@ let dotInterval = setInterval(function () {
 let Store = require("electron-store");
 const remote = require("electron").remote;
 const app = remote.app;
-let img_path = process.env.APPDATA + "/POS/uploads/";
+
+let img_path =  process.env.APPDATA + "/POS/uploads/";
+
 let api = "http://" + host + ":" + port + "/api/";
 let btoa = require("btoa");
 let jsPDF = require("jspdf");
