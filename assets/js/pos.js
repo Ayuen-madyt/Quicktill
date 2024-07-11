@@ -1490,7 +1490,7 @@ if (auth == undefined) {
       $("#newCategory").modal("show");
     };
 
-    $.fn.deleteProduct = function (id) {
+    $.fn.deleteProduct = function (id, imagePath) {
       Swal.fire({
         title: "Are you sure?",
         text: "You are about to delete this product.",
@@ -1502,7 +1502,7 @@ if (auth == undefined) {
       }).then((result) => {
         if (result.value) {
           $.ajax({
-            url: api + "inventory/product/" + id,
+            url: api + "inventory/product/" + id + "?image_path=" + imagePath,
             type: "DELETE",
             success: function (result) {
               loadProducts();
@@ -1770,9 +1770,9 @@ if (auth == undefined) {
             product.price
           }')" class="btn btn-dark btn-sm" title="Print barcode"><i class="fa fa-print"></i></button>
               <button onClick="$(this).editProduct(${index})" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
-              <button onClick="$(this).deleteProduct(${
-                product._id
-              })" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+              <button onClick="$(this).deleteProduct(${product._id}, '${
+            product.img
+          }')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
             </span>
           </td>`;
 
