@@ -2,7 +2,7 @@
 /* start of custome styles*/
 .leftMargin {
   margin-left: -110px !important;
-  width: 65% !important;
+  /* width: 65% !important; */
   overflow-x: auto !important;
 }
 
