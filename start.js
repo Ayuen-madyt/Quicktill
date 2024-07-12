@@ -3,8 +3,6 @@ const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
-
-const server = require('./server');
 const {app, BrowserWindow, ipcMain} = require('electron');
 const path = require('path')
 
@@ -76,7 +74,11 @@ function createWindow() {
 }
 
 
-app.on('ready', createWindow)
+app.on("ready", ()=>{
+  process.env.APPDATA = path.join(app.getPath('home'),app.name);
+  require('./server');
+  createWindow();
+})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
